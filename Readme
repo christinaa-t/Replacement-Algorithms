@@ -1,0 +1,119 @@
+Names & Class Accounts: Christina Tran, cssc2367
+Class Information: CS 570 Section #02, Summer 2020
+Assignment Information: Assignment #4
+Filename: README.txt
+
+File Manifest: vmalgorithm.c, vmalgorithm.h, makefile, 
+               README.txt, & testvm.c
+Compile Instructions: to generate testvm executable file: make
+Operating Instructions: ./testvm [reference page range] [number of frames]
+Results: The results for testing with: ./testvm 7 3
+
+Running program using FIFO algorithm ... ...
+ 5 -1 -1 
+ 5  2 -1 
+ 5  2 -1 
+ 5  2  0 
+ 4  2  0 
+ 4  6  0 
+ 4  6  0 
+ 4  6  0 
+ 4  6  1 
+ 3  6  1 
+ 3  4  1 
+ 3  4  5 
+ 0  4  5 
+ 0  4  5 
+ 0  4  5 
+ 0  6  5 
+ 0  6  2 
+ 0  6  2 
+ 0  6  2 
+ 1  6  2 
+page fault of FIFO: 13
+
+
+The Access Pattern: 5 2 2 0 4 6 4 4 1 3 4 5 0 4 5 6 2 0 0 1 
+Running program using LRU algorithm ... ...
+ 5 -1 -1 
+ 5  2 -1 
+ 5  2 -1 
+ 5  2  0 
+ 4  2  0 
+ 4  6  0 
+ 4  6  0 
+ 4  6  0 
+ 4  6  1 
+ 4  3  1 
+ 4  3  1 
+ 4  3  5 
+ 4  0  5 
+ 4  0  5 
+ 5  0  5 
+ 5  6  5 
+ 2  6  5 
+ 2  6  0 
+ 2  6  0 
+ 2  1  0 
+page fault of LRU: 13
+ 
+
+List of Design Decisions: (Answer Below)
+List of Extra Features: None
+List of Known Deficiencies/Bugs: None
+List of Lesson Learned: 
+    -Be able to work with pre-existing code
+
+
+Please elaborate how you implement your FIFO and LRU replacement algorithm.
+You need to explain your design, not just paste source code here ... 
+
+FIFO Implementation:
+-Create a for loop to iterate through all the values in accessPattern via AccessPatternLength
+    -Reset the pageHit to 0 for each iteratation of values
+    -Crate a for loop to iterate through the size of FrameNR 
+        -If the value of PageFrameList is the same value as accessPattern, then it is a pageHit
+            -PageHit is initilized to 1 
+    -If PageHit is initialized to 1 
+        -PrintPageFrame
+    -Else if it is not a pageHit, then pageHit is initialized to 0 
+        -Number of pageFaults increments 
+        -The value in PageFrameList that is nextToReplaced will be the next number in the accessPattern 
+        -PrintPageFrame 
+        -Number of nextToReplace increments 
+        -If the increments of nextToReplace is equivalent to the size of FrameNR then it has reached the end of the frame
+            -So we reset the value of nextToReplace to 0 and it goes back to the beginning
+-Return the total number of pageFaults
+
+LRU Implementation:
+-Create a new struct type keep track of each page entry in reference to a clock's time
+and the value of the page number being entered into the frame.
+-Create a new dynamically-allocated array, frameList, that represents the memory pages
+-Create a for loop that iterate through the size of FrameNR 
+    -Initializes the value of frameList to -1
+    -Initializes the value of clock to 0
+-Create a for loop to iterate through all the values in accessPattern via AccessPatternLength
+    -Reset the pageHit to 0 for each iteratation of values
+    -Create a for loop to iterate through the size of FrameNR 
+        -If the value of frameList is the same value as accessPattern, then it is a pageHit
+            -PageHit is initilized to 1 
+    -If it's not a pageHit then its a pageFaults  
+        -Increment the number of pageFaults
+        -Updates made to clockTime
+        -Create a for loop that iterate iterate through the size of FrameNR
+            -Compares the time of the frameList to be less than clockTime
+            -Gets the index of that frameList 
+            -Updates the index of the frame with new page from accessPattern
+            -Updates to the clock
+    -Else if it is a pageHit
+        -Create a for loop that iterate iterate through the size of FrameNR
+        -Gets the index of that frameList 
+        -Updates the index of the frame with new page from accessPattern
+        -Updates to the clock
+    -Print the new FrameList 
+    -Return the total number of pageFaults
+
+    
+
+
+
